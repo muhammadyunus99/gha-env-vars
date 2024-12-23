@@ -9,10 +9,10 @@ env:
 jobs:
   test:
     env:
-      MONGODB_CLUSTER_ADDRESS: cluster0.qyraz.mongodb.net
-      MONGODB_USERNAME: mo
-      MONGODB_PASSWORD: So5qmuWEzHg7sMKa
-      PORT: 8080
+      MONGODB_CLUSTER_ADDRESS: ${{ secrets.MONGODB_CLUSTER_ADDRESS }}
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      PORT: ${{ secrets.PORT }}
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
@@ -29,13 +29,14 @@ jobs:
       - name: Run tests
         run: npm test
       - name: Output information
-        run: |
-          echo "MONGODB_USERNAME=$MONGODB_USERNAME" # for Unix/Linux shells
+        run: |           # echo "MONGODB_USERNAME=$MONGODB_USERNAME" # for Unix/Linux shells
+          echo "MONGODB_USERNAME=${{ secrets.MONGODB_USERNAME }}" # Use correct syntax for secrets
+
   deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Output information
-        run: |        # for GitHub Actions Syntaxs
+        run: |        # for GitHub Actions Syntaxs 
           echo "MONGODB_DB_NAME: ${{env.MONGODB_DB_NAME}}"
-          echo "MONGODB_USERNAME=$MONGODB_USERNAME"
+          echo "MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}"
